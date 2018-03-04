@@ -16,6 +16,6 @@ exports.run = (client, message) => {
       message.reply("you don't have the permission to do so. " + `Your level: ${client.elevation(message)[0]} (**${client.elevation(message)[1]}**), required level: ${cmd.conf.permLevel} (**${client.textPerm(cmd.conf.permLevel)}**)`)
     }
   } else if(client.tags.has(command)) {
-    message.edit(`${args.join(" ")} ${client.tags.get(command).contents}`);
+    message.channel.send(`${args.join(" ")} ${client.tags.get(command).contents}`);
   }
 }

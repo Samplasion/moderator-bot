@@ -52,7 +52,7 @@ exports.run = (client, message, args) => {
 exports.conf = {
   enabled: true,
   guildOnly: false,
-  aliases: ['h', 'halp', 'helf', 'ohellno'],
+  aliases: ['h', 'halp', 'helf', 'ohellno', 'cmds', 'cmd', 'commands', 'command'],
   permLevel: 0
 };
 
