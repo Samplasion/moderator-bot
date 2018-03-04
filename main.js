@@ -74,7 +74,7 @@ client.elevation = message => {
   /* This function should resolve to an ELEVATION level which
      is then sent to the command handler for verification */
   let permlvl = 0, permtxt = "Normal User";
-  let mod_role = message.guild.roles.find('name', client.settings.modRole);
+/*  let mod_role = message.guild.roles.find('name', client.settings.modRole);
   if (mod_role && message.member.roles.has(mod_role.id)) {
     permlvl = 2;
     permtxt = "Moderator";
@@ -83,7 +83,7 @@ client.elevation = message => {
   if (admin_role && message.member.roles.has(admin_role.id)) {
     permlvl = 3;
     permtxt = "Admin";
-  };
+  }; */
   if (message.author.id === message.guild.ownerID) {
     permlvl = 4;
     permtxt = "Guild Owner";
