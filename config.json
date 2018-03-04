@@ -1,4 +1,6 @@
 {
   "prefix": "m!",
-  "ownerID": "280399026749440000"
+  "ownerID": "280399026749440000",
+  "modrolename": "Moderator",
+  "adminrolename": "Admin"
 } 

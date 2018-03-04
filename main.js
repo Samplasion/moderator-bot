@@ -45,4 +45,44 @@ fs.readdir("./events/", (err, files) => {
   });
 });
 
+client.elevation = message => {
+  /* This function should resolve to an ELEVATION level which
+     is then sent to the command handler for verification */
+  let permlvl = 0, permtxt = "Normal User";
+  let mod_role = message.guild.roles.find('name', client.config.modrolename);
+  if (mod_role && message.member.roles.has(mod_role.id)) {
+    permlvl = 2;
+    permtxt = "Moderator";
+  };
+  let admin_role = message.guild.roles.find('name', client.config.adminrolename);
+  if (admin_role && message.member.roles.has(admin_role.id)) {
+    permlvl = 3;
+    permtxt = "Admin";
+  };
+  if (message.author.id === message.guild.ownerID) {
+    permlvl = 4;
+    permtxt = "Guild Owner";
+  };
+  if (message.author.id === client.config.ownerID) {
+    permlvl = 10;
+    permtxt = "Bot Owner";
+  };
+  return [permlvl, permtxt];
+};
+
+client.textPerm = permLvl => {
+  var permtxt = "Normal User";
+  if (permLvl === 2) {
+    permtxt = "Moderator";
+  };
+  if (permLvl === 3) {
+    permtxt = "Admin";
+  };
+  if (permLvl === 4) {
+    permtxt = "Guild Owner";
+  };
+  if (permLvl === 10) permtxt = "Bot Owner";
+  return permtxt;
+};
+
 client.login(process.env.SECRET)

@@ -6,11 +6,15 @@ exports.run = (client, message) => {
 
   const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
   if (cmd) {
-    message.flags = [];
-    while(args[0] && args[0][0] === "-") {
-      message.flags.push(args.shift().slice(1));
+    if (cmd.conf.permLevel <= client.elevation(message)[0]) {
+      message.flags = [];
+      while(args[0] && args[0][0] === "-") {
+        message.flags.push(args.shift().slice(1));
+      }
+      cmd.run(client, message, args);
+    } else {
+      message.reply("you don't have the permission to do so. " + `Your level: ${client.elevation(message)[0]} (**${client.elevation(message)[1]}**), required level: ${cmd.conf.permLevel} (**${client.textPerm(cmd.conf.permLevel)}**)`)
     }
-    cmd.run(client, message, args);
   } else if(client.tags.has(command)) {
     message.edit(`${args.join(" ")} ${client.tags.get(command).contents}`);
   }

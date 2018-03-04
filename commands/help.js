@@ -3,7 +3,7 @@ String.prototype.toProperCase = function() {
   return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }; 
 exports.run = (client, message, args) => {
-  const level = 4;
+  const level = client.elevation(message)[0];
   // If no specific command is called, show all filtered commands.
   if (!args[0]) {
     // Load guild settings (for prefixes and eventually per-guild tweaks)
