@@ -8,6 +8,7 @@ exports.run = async (client, message, args) => {
     message.channel.send(client.clean(evaled), {code:"xl"});
   } catch (err) {
     message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(err)}\n\`\`\``);
+    console.error(err)
   }
 };
 

@@ -25,7 +25,7 @@ const EnmapLevel = require('enmap-level');
 const tableSource = new EnmapLevel({name: "settings", persistent: true});
 client.settings = new Enmap({provider: tableSource});
 
-const defaultSettings = {
+client.defaultSettings = {
   prefix: "m!",
   modLogChannel: "mod-log",
   modRole: "Moderator",
@@ -34,7 +34,7 @@ const defaultSettings = {
 }
 
 client.on("guildCreate", guild => {
-  client.settings.set(guild.id, defaultSettings);
+  client.settings.set(guild.id, client.defaultSettings);
 });
 
 client.on("guildDelete", guild => {
