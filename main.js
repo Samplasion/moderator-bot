@@ -19,6 +19,31 @@ client.commands = new discord.Collection();
 client.aliases = new discord.Collection();
 client.config = config;
 
+// Persistence
+const Enmap = require('enmap');
+const EnmapLevel = require('enmap-level');
+const tableSource = new EnmapLevel({name: "settings", persistent: true});
+client.settings = new Enmap({provider: tableSource});
+
+const defaultSettings = {
+  prefix: "m!",
+  modLogChannel: "mod-log",
+  modRole: "Moderator",
+  adminRole: "Administrator",
+  welcomeMessage: "Say hello to {{user}}, everyone! We all need a warm welcome sometimes :D"
+}
+
+client.on("guildCreate", guild => {
+  client.settings.set(guild.id, defaultSettings);
+});
+
+client.on("guildDelete", guild => {
+  // Removing an element uses `delete(key)`
+  client.settings.delete(guild.id);
+});
+
+require("./modules/functions.js")(client);
+
 fs.readdir('./commands/', (err, files) => {
   if (err) console.error(err);
   console.log(`Loading a total of ${files.length} commands.`);
@@ -49,12 +74,12 @@ client.elevation = message => {
   /* This function should resolve to an ELEVATION level which
      is then sent to the command handler for verification */
   let permlvl = 0, permtxt = "Normal User";
-  let mod_role = message.guild.roles.find('name', client.config.modrolename);
+  let mod_role = message.guild.roles.find('name', client.settings.modRole);
   if (mod_role && message.member.roles.has(mod_role.id)) {
     permlvl = 2;
     permtxt = "Moderator";
   };
-  let admin_role = message.guild.roles.find('name', client.config.adminrolename);
+  let admin_role = message.guild.roles.find('name', client.settings.adminRole);
   if (admin_role && message.member.roles.has(admin_role.id)) {
     permlvl = 3;
     permtxt = "Admin";

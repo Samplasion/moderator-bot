@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "discord.js": "^11.3.0",
+    "enmap": "^0.5.0",
+    "enmap-level": "^1.0.1",
+    "enmap-rethink": "^1.1.4",
     "express": "^4.16.2"
   },
   "engines": {
