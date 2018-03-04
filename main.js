@@ -3,6 +3,18 @@ const client = new discord.Client();
 const fs = require("fs");
 const config = require('./config.json');
 
+const http = require('http');
+const express = require('express');
+const app = express();
+app.get("/", (request, response) => {
+  console.log(Date.now() + " Ping Received");
+  response.sendStatus(200);
+});
+app.listen(process.env.PORT);
+setInterval(() => {
+  http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+}, 280000);
+
 client.commands = new discord.Collection();
 client.aliases = new discord.Collection();
 client.config = config;
@@ -14,6 +26,7 @@ fs.readdir('./commands/', (err, files) => {
     if(f.split(".").slice(-1)[0] !== "js") return;
     let props = require(`./commands/${f}`);
     client.commands.set(props.help.name, props);
+    console.log(`Loaded command: ${props.help.name}. 👌`);
     if(props.init) props.init(client);
     props.conf.aliases.forEach(alias => {
       client.aliases.set(alias, props.help.name);
