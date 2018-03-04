@@ -28,6 +28,14 @@ module.exports = (client) => {
     }
   };
   
+  client.answer = (msg, contents, options = {}) => {
+    options.delay =  (options.delay || 2000);
+    if(msg.flags.includes("delme")) options.deleteAfter = true;
+    options.deleteAfter = (options.deleteAfter || false);
+    msg.channel.send(contents);
+    if(options.deleteAfter) msg.delete({timeout: options.delay});
+  };
+  
   client.clean = async (client, text) => {
     if (text && text.constructor.name == "Promise")
       text = await text;
@@ -45,7 +53,7 @@ module.exports = (client) => {
   client.loadCommand = (commandName) => {
     try {
       const props = require(`../commands/${commandName}`);
-      client.logger.log(`Loading Command: ${props.help.name}. 👌`);
+      console.log(`Loading Command: ${props.help.name}. 👌`);
       if (props.init) {
         props.init(client);
       }
@@ -66,7 +74,7 @@ module.exports = (client) => {
     } else if (client.aliases.has(commandName)) {
       command = client.commands.get(client.aliases.get(commandName));
     }
-    if (!command) return `The command \`${commandName}\` doesn"t seem to exist, nor is it an alias. Try again!`;
+    if (!command) return `The command \`${commandName}\` doesn't seem to exist, nor is it an alias. Try again!`;
   
     if (command.shutdown) {
       await command.shutdown(client);
@@ -85,7 +93,7 @@ module.exports = (client) => {
 
   client.wait = require("util").promisify(setTimeout);
   
-  process.on("uncaughtException", (err) => {
+  /*process.on("uncaughtException", (err) => {
     const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
     console.error(`Uncaught Exception: ${errorMsg}`);
     process.exit(1);
@@ -93,5 +101,5 @@ module.exports = (client) => {
 
   process.on("unhandledRejection", err => {
     client.logger.error(`Unhandled rejection: ${err}`);
-  });
+  });*/
 };

@@ -7,7 +7,7 @@ exports.run = (client, message, args) => {
   // If no specific command is called, show all filtered commands.
   if (!args[0]) {
     // Load guild settings (for prefixes and eventually per-guild tweaks)
-    const settings = client.config;
+    const settings = /*client.config;*/ client.settings.get(message.guild.id)
 
     // Filter all commands by which are available for the user's level, using the <Collection>.filter() method.
     const myCommands = new Discord.Collection();
@@ -15,7 +15,7 @@ exports.run = (client, message, args) => {
     client.commands.forEach(cmd => {
       if (cmd.conf.permLevel <= level) {
         myCommands.set(cmd.help.name, cmd);
-      } // Ok, i question : Multiple help commands ? Like : help basic, help .., help economy, help music? something like this?
+      }
     });
  
     // Here we have to get the command names only, and we use that array to get the longest name.
@@ -24,7 +24,7 @@ exports.run = (client, message, args) => {
     const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
     let currentCategory = "";
-    let output = `= Command List =\n\n[Use ${settings.prefix}help <commandname> for details]\n`;
+    let output = `= Command List =\n\n[Use ${settings.prefix}help <commandname> for details]\nRemember: <required argument> [optional argument]\n`;
     const sorted = myCommands.array().sort((p, c) => p.help.category > c.help.category ? 1 :  p.help.name > c.help.name && p.help.category === c.help.category ? 1 : -1 );
     sorted.forEach( c => {
       const cat = c.help.category.toProperCase();
@@ -58,7 +58,7 @@ exports.conf = {
 
 exports.help = {
   name: "help",
-  category: "Basic",
+  category: "System",
   description: "This command",
   usage: "help"
 }

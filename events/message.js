@@ -1,5 +1,5 @@
 exports.run = (client, message) => {
-  if(message.content.indexOf(client.config.prefix) !== 0) return;
+  if(message.content.indexOf(client.settings.get(message.guild.id).prefix) !== 0) return;
 
   const args = message.content.split(/ +/g);
   const command = args.shift().slice(client.config.prefix.length).toLowerCase();

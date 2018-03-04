@@ -43,7 +43,7 @@ exports.conf = {
 
 exports.help = {
   name: "ping",
-  category: "Basic",
+  category: "System",
   description: "It pings and then pongs!",
   usage: "ping"
 }

@@ -4,7 +4,7 @@ exports.run = async (client, message, args) => {
     let evaled = eval(code);
 
     if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
-    if (typeof evaled === Promise) await evaled;
+    if (evaled instanceof Promise) await evaled;
     message.channel.send(client.clean(evaled), {code:"xl"});
   } catch (err) {
     message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(err)}\n\`\`\``);

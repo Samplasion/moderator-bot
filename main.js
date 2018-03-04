@@ -25,12 +25,12 @@ const EnmapLevel = require('enmap-level');
 const tableSource = new EnmapLevel({name: "settings", persistent: true});
 client.settings = new Enmap({provider: tableSource});
 
+client.db = require("./modules/PersistentDB.js");
+
 client.defaultSettings = {
   prefix: "m!",
-  modLogChannel: "mod-log",
   modRole: "Moderator",
   adminRole: "Administrator",
-  welcomeMessage: "Say hello to {{user}}, everyone! We all need a warm welcome sometimes :D"
 }
 
 client.on("guildCreate", guild => {
@@ -43,6 +43,7 @@ client.on("guildDelete", guild => {
 });
 
 require("./modules/functions.js")(client);
+require("./modules/logger.js")(client);
 
 fs.readdir('./commands/', (err, files) => {
   if (err) console.error(err);
@@ -73,17 +74,18 @@ fs.readdir("./events/", (err, files) => {
 client.elevation = message => {
   /* This function should resolve to an ELEVATION level which
      is then sent to the command handler for verification */
+  const guildConf = client.settings.get(message.guild.id);
   let permlvl = 0, permtxt = "Normal User";
-/*  let mod_role = message.guild.roles.find('name', client.settings.modRole);
+  let mod_role = message.guild.roles.find('name', guildConf.modRole);
   if (mod_role && message.member.roles.has(mod_role.id)) {
     permlvl = 2;
     permtxt = "Moderator";
   };
-  let admin_role = message.guild.roles.find('name', client.settings.adminRole);
+  let admin_role = message.guild.roles.find('name', guildConf.adminRole);
   if (admin_role && message.member.roles.has(admin_role.id)) {
     permlvl = 3;
     permtxt = "Admin";
-  }; */
+  };
   if (message.author.id === message.guild.ownerID) {
     permlvl = 4;
     permtxt = "Guild Owner";
